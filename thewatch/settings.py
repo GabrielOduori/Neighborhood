@@ -37,6 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts',
+    'neighbors',
+    'bootstrap4',
+    'django.contrib.gis',
+    'crispy_forms',
+    'leaflet',
+    'mapwidgets',
 ]
 
 MIDDLEWARE = [
@@ -73,10 +80,22 @@ WSGI_APPLICATION = 'thewatch.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'neighborsdb',
+        'USER': 'goduori',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
@@ -105,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'
 
 USE_I18N = True
 
@@ -117,4 +136,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'accounts/static/')
+STATIC_URL = 'static/'
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+LOGIN_REDIRECT_URL =  '/neighbors/'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+
+
+
+# LEAFLET_CONFIG = {
+#     'DEFAULT_CENTER': (-1.301829, 36.837780),
+#     'DEFAULT_ZOOM': 8,
+#     'MAX_ZOOM': 18,
+#     'MIN_ZOOM':3,
+#     'SCALE': 'both',
+# }
