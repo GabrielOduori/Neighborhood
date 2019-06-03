@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import django_heroku
+import dj_database_url
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,14 +21,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
+MODE = config("MODE",default = "dev")
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wz$k-*9)m&60kh%gk#bne_2=@0uamfftf@!6@r0yp*av3zwgee'
+# SECRET_KEY = 'wz$k-*9)m&60kh%gk#bne_2=@0uamfftf@!6@r0yp*av3zwgee'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,14 +47,15 @@ INSTALLED_APPS = [
     'accounts',
     'neighbors',
     'bootstrap4',
-    'django.contrib.gis',
-    'crispy_forms',
-    'leaflet',
-    'mapwidgets',
+    'crispy_forms'
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+        # Simplified static file serving.
+    # https://warehouse.python.org/project/whitenoise/
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,17 +95,43 @@ WSGI_APPLICATION = 'thewatch.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'neighborsdb',
-        'USER': 'goduori',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#         'NAME': '',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
+
+
+
+if config('MODE')=="dev":
+    DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': config('DB_NAME'),
+           'USER': config('DB_USER'),
+           'PASSWORD': config('DB_PASSWORD'),
+           'HOST': config('DB_HOST'),
+           'PORT': '',
+       }
+       
+   }
+#Production
+else:
+    DATABASES = {
+            'default':dj_database_url.config(
+                default = config('DATABASE_URL')
+            )
+        }
+db_from_env = dj_database_url.config(conn_max_age = 500)
+DATABASES['default'].update(db_from_env)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS',cast = Csv)
+
 
 
 # Password validation
@@ -139,9 +173,12 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'accounts/static/')
 STATIC_URL = 'static/'
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-#     ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    ]
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -163,3 +200,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 #     'MIN_ZOOM':3,
 #     'SCALE': 'both',
 # }
+django_heroku.settings(locals())
