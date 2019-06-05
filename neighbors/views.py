@@ -17,9 +17,9 @@ def home(request):
     # }
     
     title = "Neighbors"
-    posts = Post.objects.all()[:3]
-    hoods = Neighborhood.objects.all()[:3]
-    business = Business.objects.all()[:3]
+    posts = Post.objects.all().order_by('-pub_date')[:3]
+    hoods = Neighborhood.objects.all().order_by('id')[:3]
+    business = Business.objects.all().order_by('id')[:3]
     
     
     return render(request, 'neighbors/index.html', {"title":title, "posts":posts, "hoods":hoods, "business":business})
@@ -52,9 +52,12 @@ def create_neighhood(request):
 
 
 def neighborhood_details(request, id):
-    hood_detals = get_object_or_404(Neighborhood, id = id)
+    hood_detail = Neighborhood.objects.get(pk=id)
     
-    return render(request, 'neighbors/neighborhoods_details.html', {"hood_detals":hood_detals})
+    context = {
+        'hood_detail':hood_detail
+    }    
+    return render(request, 'neighbors/neighborhoods_details.html', context)
 
 
 def posts(request):
