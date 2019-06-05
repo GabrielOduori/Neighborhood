@@ -3,8 +3,6 @@ from accounts.forms import RegistrationForm
 from django.contrib.auth.models import User
 # from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
-# from projects.models import Project
-# from .models import Profile
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, logout 
@@ -22,12 +20,9 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/accounts/profile')
+            return redirect('/accounts/login')
     else:
         form = RegistrationForm()
-        # context = {
-        #     'form':form
-        # }
         
     return render(request,'accounts/register_form.html',{"form":form})
     
@@ -95,5 +90,5 @@ def user_profile(request):
 def logout_user(request):
     logout(request)
     print('You have been logged out')
-    return redirect('home-page:home-page')
+    return redirect('neighbors:home')
     
