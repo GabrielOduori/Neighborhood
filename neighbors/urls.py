@@ -7,18 +7,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', neighbors_views.home, name = 'home'),
-    url(r'^neighborhoods/$', neighbors_views.neighborhoods, name = 'neighborhoods'),
-    url(r'^neighborhood/(?P<id>\d+)/$', neighbors_views.neighborhood_detail, name = 'hood-details'),
-          
-      
-      
-    # url(r'^checkin/$', neighbors_views.checkin, name = 'checkin'),
-    # url(r'^neighbor/location$', neighbors_views.locations, name = 'checkin'),
-    # url(r'^api/profile/$', project_views.ProfileAPI.as_view()),
-    # url(r'^api/project/$', project_views.ProjectAPI.as_view()),
-   
-      
-    
+    url(r'^neighborhoods/$', neighbors_views.all_neighbors, name = 'all_neighbors'),
+    # url(r'^neighborhoods/(?P<pk>\d+)/$', neighbors_views.neighborhood_details, name = 'hood-details'),
+    url(r'^neighborhoods/(?P<id>\d+)/$', neighbors_views.neighborhood_details, name = 'hood-details'),
+
 ]
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
