@@ -24,10 +24,10 @@ def home(request):
     return render(request, 'neighbors/index.html', {"title":title, "posts":posts, "hoods":hoods, "business":business})
 
 
-def neighborhoods(request):
-    hoods = Neighborhood.objects.all()
+def all_neighbors(request):
+    all_neighbors = Neighborhood.objects.all()
     
-    return render(request, 'neighbors/location.html', {"hoods":hoods})
+    return render(request, 'neighbors/neighborhoods.html', {"all_neighbors":all_neighbors})
 
 def create_neighhood(request):
     current_user = request.user.profile
@@ -50,10 +50,10 @@ def create_neighhood(request):
 
 
 
-def neighborhood_detail(request, id):
-    hoods = Neighborhood.objects.all()
+def neighborhood_details(request, id):
+    hood_detals = get_object_or_404(Neighborhood, id = id)
     
-    return render(request, 'neighbors/details.html', {"hoods":hoods})
+    return render(request, 'neighbors/neighborhoods_details.html', {"hood_detals":hood_detals})
 
 
 def posts(request):
