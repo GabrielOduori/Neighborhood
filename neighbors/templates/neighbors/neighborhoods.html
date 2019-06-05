@@ -1,0 +1,24 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <h1 class="text-center pt-3">Select your hood!</h1>
+    <br/>
+    <br/>
+    <hr>
+      <div class="card bg-light mb-3" style="max-width: 20rem;">
+        {% if all_neighbors %}
+            {% for hood in all_neighbors %}
+            <div class="card-header"> {{hood.name}}</div>
+            <div class="card-body">
+            <h6 class="card-title">Address:{{hood.address}}</h6>
+            <p class="card-text">City:{{hood.city}}</p>
+            <a href="" class="card-link"><h6>Checkin...</h6></a>
+        </div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      </div>      
+      </div>
+{% endblock %}
