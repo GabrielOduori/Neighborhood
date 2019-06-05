@@ -21,10 +21,5 @@ class Profile(models.Model):
 We dont have to create profiles every time a user signs up. Instead,
 we are going to use django signals to get that done automatically.
 '''
-def create_profile(sender, **kwargs):
-    if kwargs['created']:
-        user_profile = Profile.objects.create(user = kwargs['instance'])
-        
-post_save.connect(create_profile, sender=User) 
 
 
