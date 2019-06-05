@@ -4,6 +4,7 @@ from neighbors.forms import (AddBusinessForm, AddContactForm,
                              AddNeighborhoodForm, AddPostForm)
 from django.urls import reverse
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -23,7 +24,7 @@ def home(request):
     
     return render(request, 'neighbors/index.html', {"title":title, "posts":posts, "hoods":hoods, "business":business})
 
-
+@login_required
 def all_neighbors(request):
     all_neighbors = Neighborhood.objects.all()
     
